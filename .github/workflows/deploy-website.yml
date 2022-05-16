@@ -1,14 +1,9 @@
 name: Deploy
 
 on:
-  push:
-    branches:
-      - "main"
-    paths:
-      - "docs/**"
-      - "website/**"
-      - ".github/workflows/deploy-website.yml"
-
+- pull_request
+- push
+  
 jobs:
   deploy:
     runs-on: ubuntu-latest
