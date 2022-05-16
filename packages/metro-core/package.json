@@ -12,7 +12,6 @@
     "cleanup-release": "test ! -e build && mv src build && mv src.real src"
   },
   "dependencies": {
-    "jest-haste-map": "^27.3.1",
     "lodash.throttle": "^4.1.1",
     "metro-resolver": "0.70.2"
   },

@@ -37,6 +37,7 @@ const http = require('http');
 const https = require('https');
 const {getDefaultConfig, loadConfig, mergeConfig} = require('metro-config');
 const {InspectorProxy} = require('metro-inspector-proxy');
+const net = require('net');
 const {parse} = require('url');
 const ws = require('ws');
 
@@ -171,7 +172,7 @@ const createConnectMiddleware = async function (
 ): Promise<MetroMiddleWare> {
   const metroServer = await runMetro(config, options);
 
-  let enhancedMiddleware = metroServer.processRequest;
+  let enhancedMiddleware: Middleware = metroServer.processRequest;
 
   // Enhance the resulting middleware using the config options
   if (config.server.enhanceMiddleware) {
@@ -225,6 +226,8 @@ exports.runServer = async (
     websocketEndpoints = {},
   }: RunServerOptions,
 ): Promise<HttpServer | HttpsServer> => {
+  await earlyPortCheck(host, config.server.port);
+
   if (secure != null || secureCert != null || secureKey != null) {
     // eslint-disable-next-line no-console
     console.warn(
@@ -256,13 +259,11 @@ exports.runServer = async (
   if (secure || secureServerOptions != null) {
     let options = secureServerOptions;
     if (typeof secureKey === 'string' && typeof secureCert === 'string') {
-      options = Object.assign(
-        {
-          key: fs.readFileSync(secureKey),
-          cert: fs.readFileSync(secureCert),
-        },
-        secureServerOptions,
-      );
+      options = {
+        key: fs.readFileSync(secureKey),
+        cert: fs.readFileSync(secureCert),
+        ...secureServerOptions,
+      };
     }
     httpServer = https.createServer(options, serverApp);
   } else {
@@ -463,3 +464,17 @@ exports.attachMetroCli = function (
   }
   return yargs;
 };
+
+async function earlyPortCheck(host: void | string, port: number) {
+  const server = net.createServer(c => c.end());
+  try {
+    await new Promise((resolve, reject) => {
+      server.on('error', err => {
+        reject(err);
+      });
+      server.listen(port, host, undefined, () => resolve());
+    });
+  } finally {
+    await new Promise(resolve => server.close(() => resolve()));
+  }
+}

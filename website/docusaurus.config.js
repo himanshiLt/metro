@@ -9,23 +9,33 @@
 
 'use strict';
 
+const {fbContent} = require('internaldocs-fb-helpers');
+
 const siteConfig = {
+  // TODO: Reenable broken link detection after docusaurus upgrade
+  onBrokenLinks: 'warn',
   presets: [
     [
-      '@docusaurus/preset-classic',
+      require.resolve('docusaurus-plugin-internaldocs-fb/docusaurus-preset'),
       {
         docs: {
           path: '../docs',
-          editUrl: 'https://github.com/facebook/metro/edit/main/docs',
+          editUrl: fbContent({
+            internal:
+              'https://www.internalfb.com/intern/diffusion/FBS/browse/master/xplat/js/tools/metro/docs/',
+            external: 'https://github.com/facebook/metro/edit/main/docs',
+          }),
           sidebarPath: require.resolve('./sidebars.json'),
-          showLastUpdateTime: true,
+          showLastUpdateTime: fbContent({
+            internal: false,
+            external: true,
+          }),
         },
         theme: {
           customCss: require.resolve('./src/css/custom.scss'),
         },
-        gtag: {
-          trackingID: 'UA-44373548-17',
-        },
+        staticDocsProject: 'metro',
+        enableEditor: true,
       },
     ],
   ],
@@ -56,7 +66,6 @@ const siteConfig = {
         {label: 'Docs', to: 'docs/getting-started'},
         {label: 'API', to: 'docs/api'},
         {label: 'Help', to: 'help'},
-        {label: 'Blog', to: 'blog'},
         {
           label: 'Twitter',
           href: 'https://twitter.com/MetroBundler',
@@ -91,10 +100,7 @@ const siteConfig = {
         },
         {
           title: 'More',
-          items: [
-            {label: 'Blog', to: 'blog'},
-            {label: 'Github', href: 'https://github.com/facebook/metro'},
-          ],
+          items: [{label: 'GitHub', href: 'https://github.com/facebook/metro'}],
         },
       ],
       logo: {
@@ -109,6 +115,9 @@ const siteConfig = {
       apiKey: 'd51e7fbd21ccab3db4c83f0f736f6a3a',
       appId: 'T38HJZTD87',
       indexName: 'metro',
+    },
+    gtag: {
+      trackingID: 'UA-44373548-17',
     },
   },
   scripts: ['https://buttons.github.io/buttons.js'],

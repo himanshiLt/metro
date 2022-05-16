@@ -24,6 +24,8 @@ jest
   .mock('metro-minify-uglify');
 
 import type {JsTransformerConfig} from '../index';
+import typeof TransformerType from '../index';
+import typeof FSType from 'fs';
 
 const HermesCompiler = require('metro-hermes-compiler');
 const path = require('path');
@@ -38,8 +40,8 @@ const HEADER_DEV =
   '__d(function (global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) {';
 const HEADER_PROD = '__d(function (g, r, i, a, m, e, d) {';
 
-let fs;
-let Transformer;
+let fs: FSType;
+let Transformer: TransformerType;
 
 const baseConfig: JsTransformerConfig = {
   allowOptionalDependencies: false,
@@ -72,6 +74,7 @@ beforeEach(() => {
 
   fs = require('fs');
   Transformer = require('../');
+  // $FlowFixMe[prop-missing] Cannot call `fs.reset` because property `reset` is missing in  module `fs`
   fs.reset();
 
   fs.mkdirSync('/root/local', {recursive: true});
@@ -84,7 +87,9 @@ it('transforms a simple script', async () => {
     baseConfig,
     '/root',
     'local/file.js',
+    // $FlowFixMe[incompatible-call] Added when annotating Transformer. string is incompatible with Buffer.
     'someReallyArbitrary(code)',
+    // $FlowFixMe[prop-missing] Added when annotating Transformer.
     {
       dev: true,
       type: 'script',
@@ -109,7 +114,9 @@ it('transforms a simple module', async () => {
     baseConfig,
     '/root',
     'local/file.js',
+    // $FlowFixMe[incompatible-call] Added when annotating Transformer. string is incompatible with Buffer.
     'arbitrary(code)',
+    // $FlowFixMe[prop-missing] Added when annotating Transformer.
     {
       dev: true,
       type: 'module',
@@ -138,7 +145,9 @@ it('transforms a module with dependencies', async () => {
     baseConfig,
     '/root',
     'local/file.js',
+    // $FlowFixMe[incompatible-call] Added when annotating Transformer. string is incompatible with Buffer.
     contents,
+    // $FlowFixMe[prop-missing] Added when annotating Transformer.
     {
       dev: true,
       type: 'module',
@@ -181,7 +190,9 @@ it('transforms an es module with asyncToGenerator', async () => {
     baseConfig,
     '/root',
     'local/file.js',
+    // $FlowFixMe[incompatible-call] Added when annotating Transformer. string is incompatible with Buffer.
     'export async function test() {}',
+    // $FlowFixMe[prop-missing] Added when annotating Transformer.
     {
       dev: true,
       type: 'module',
@@ -209,7 +220,9 @@ it('transforms async generators', async () => {
     baseConfig,
     '/root',
     'local/file.js',
+    // $FlowFixMe[incompatible-call] Added when annotating Transformer. string is incompatible with Buffer.
     'export async function* test() { yield "ok"; }',
+    // $FlowFixMe[prop-missing] Added when annotating Transformer.
     {
       dev: true,
       type: 'module',
@@ -240,7 +253,9 @@ it('transforms import/export syntax when experimental flag is on', async () => {
     baseConfig,
     '/root',
     'local/file.js',
+    // $FlowFixMe[incompatible-call] Added when annotating Transformer. string is incompatible with Buffer.
     contents,
+    // $FlowFixMe[prop-missing] Added when annotating Transformer.
     {
       dev: true,
       experimentalImportSupport: true,
@@ -275,7 +290,9 @@ it('does not add "use strict" on non-modules', async () => {
     baseConfig,
     '/root',
     'node_modules/local/file.js',
+    // $FlowFixMe[incompatible-call] Added when annotating Transformer. string is incompatible with Buffer.
     'module.exports = {};',
+    // $FlowFixMe[prop-missing] Added when annotating Transformer.
     {
       dev: true,
       experimentalImportSupport: true,
@@ -299,7 +316,9 @@ it('preserves require() calls when module wrapping is disabled', async () => {
     },
     '/root',
     'local/file.js',
+    // $FlowFixMe[incompatible-call] Added when annotating Transformer. string is incompatible with Buffer.
     contents,
+    // $FlowFixMe[prop-missing] Added when annotating Transformer.
     {
       dev: true,
       type: 'module',
@@ -322,7 +341,9 @@ it('reports filename when encountering unsupported dynamic dependency', async ()
       baseConfig,
       '/root',
       'local/file.js',
+      // $FlowFixMe[incompatible-call] Added when annotating Transformer. string is incompatible with Buffer.
       contents,
+      // $FlowFixMe[prop-missing] Added when annotating Transformer.
       {
         dev: true,
         type: 'module',
@@ -344,7 +365,9 @@ it('supports dynamic dependencies from within `node_modules`', async () => {
         },
         '/root',
         'node_modules/foo/bar.js',
+        // $FlowFixMe[incompatible-call] Added when annotating Transformer. string is incompatible with Buffer.
         'require(foo.bar);',
+        // $FlowFixMe[prop-missing] Added when annotating Transformer.
         {
           dev: true,
           type: 'module',
@@ -369,7 +392,9 @@ it('minifies the code correctly', async () => {
         baseConfig,
         '/root',
         'local/file.js',
+        // $FlowFixMe[incompatible-call] Added when annotating Transformer. string is incompatible with Buffer.
         'arbitrary(code);',
+        // $FlowFixMe[prop-missing] Added when annotating Transformer.
         {
           dev: true,
           minify: true,
@@ -387,7 +412,9 @@ it('minifies a JSON file', async () => {
         baseConfig,
         '/root',
         'local/file.json',
+        // $FlowFixMe[incompatible-call] Added when annotating Transformer. string is incompatible with Buffer.
         'arbitrary(code);',
+        // $FlowFixMe[prop-missing] Added when annotating Transformer.
         {
           dev: true,
           minify: true,
@@ -414,7 +441,9 @@ it('does not wrap a JSON file when disableModuleWrapping is enabled', async () =
         },
         '/root',
         'local/file.json',
+        // $FlowFixMe[incompatible-call] Added when annotating Transformer. string is incompatible with Buffer.
         'arbitrary(code);',
+        // $FlowFixMe[prop-missing] Added when annotating Transformer.
         {
           dev: true,
           type: 'module',
@@ -429,7 +458,9 @@ it('transforms a script to JS source and bytecode', async () => {
     baseConfig,
     '/root',
     'local/file.js',
+    // $FlowFixMe[incompatible-call] Added when annotating Transformer. string is incompatible with Buffer.
     'someReallyArbitrary(code)',
+    // $FlowFixMe[prop-missing] Added when annotating Transformer.
     {
       dev: true,
       runtimeBytecodeVersion: 1,
@@ -441,7 +472,7 @@ it('transforms a script to JS source and bytecode', async () => {
   const bytecodeOutput = result.output.find(
     output => output.type === 'bytecode/script',
   );
-
+  // $FlowFixMe[incompatible-use] Added when annotating Transformer. data missing in jsOutput.
   expect(jsOutput.data.code).toBe(
     [
       '(function (global) {',
@@ -451,6 +482,8 @@ it('transforms a script to JS source and bytecode', async () => {
   );
 
   expect(() =>
+    // $FlowFixMe[incompatible-use] Added when annotating Transformer. data missing in bytecodeOutput.
+    // $FlowFixMe[incompatible-call] Added when annotating Transformer. bytecode property is missing.
     HermesCompiler.validateBytecodeModule(bytecodeOutput.data.bytecode, 0),
   ).not.toThrow();
 });
@@ -488,7 +521,9 @@ it('allows replacing the collectDependencies implementation', async () => {
     config,
     '/root',
     'local/file.js',
+    // $FlowFixMe[incompatible-call] Added when annotating Transformer. string is incompatible with Buffer.
     'require("foo")',
+    // $FlowFixMe[prop-missing] Added when annotating Transformer.
     options,
   );
 
@@ -515,7 +550,9 @@ it('uses a reserved dependency map name and prevents it from being minified', as
     {...baseConfig, unstable_dependencyMapReservedName: 'THE_DEP_MAP'},
     '/root',
     'local/file.js',
+    // $FlowFixMe[incompatible-call] Added when annotating Transformer. string is incompatible with Buffer.
     'arbitrary(code);',
+    // $FlowFixMe[prop-missing] Added when annotating Transformer.
     {
       dev: false,
       minify: true,
@@ -535,7 +572,9 @@ it('throws if the reserved dependency map name appears in the input', async () =
       {...baseConfig, unstable_dependencyMapReservedName: 'THE_DEP_MAP'},
       '/root',
       'local/file.js',
+      // $FlowFixMe[incompatible-call] Added when annotating Transformer. string is incompatible with Buffer.
       'arbitrary(code); /* the code is not allowed to mention THE_DEP_MAP, even in a comment */',
+      // $FlowFixMe[prop-missing] Added when annotating Transformer.
       {
         dev: false,
         minify: true,
@@ -552,7 +591,9 @@ it('allows disabling the normalizePseudoGlobals pass when minifying', async () =
     {...baseConfig, unstable_disableNormalizePseudoGlobals: true},
     '/root',
     'local/file.js',
+    // $FlowFixMe[incompatible-call] Added when annotating Transformer. string is incompatible with Buffer.
     'arbitrary(code);',
+    // $FlowFixMe[prop-missing] Added when annotating Transformer.
     {
       dev: false,
       minify: true,
@@ -571,7 +612,9 @@ it('allows emitting compact code when not minifying', async () => {
     {...baseConfig, unstable_compactOutput: true},
     '/root',
     'local/file.js',
+    // $FlowFixMe[incompatible-call] Added when annotating Transformer. string is incompatible with Buffer.
     'arbitrary(code);',
+    // $FlowFixMe[prop-missing] Added when annotating Transformer.
     {
       dev: false,
       minify: false,
@@ -588,7 +631,9 @@ it('skips minification in Hermes stable transform profile', async () => {
     baseConfig,
     '/root',
     'local/file.js',
+    // $FlowFixMe[incompatible-call] Added when annotating Transformer. string is incompatible with Buffer.
     'arbitrary(code);',
+    // $FlowFixMe[prop-missing] Added when annotating Transformer.
     {
       dev: false,
       minify: true,
@@ -608,7 +653,9 @@ it('skips minification in Hermes canary transform profile', async () => {
     baseConfig,
     '/root',
     'local/file.js',
+    // $FlowFixMe[incompatible-call] Added when annotating Transformer. string is incompatible with Buffer.
     'arbitrary(code);',
+    // $FlowFixMe[prop-missing] Added when annotating Transformer.
     {
       dev: false,
       minify: true,
@@ -627,11 +674,19 @@ it('counts all line endings correctly', async () => {
   const transformStr = (
     str: $TEMPORARY$string<'one\ntwo\nthree\nfour\nfive\nsix'> | string,
   ) =>
-    Transformer.transform(baseConfig, '/root', 'local/file.js', str, {
-      dev: false,
-      minify: false,
-      type: 'module',
-    });
+    Transformer.transform(
+      baseConfig,
+      '/root',
+      'local/file.js',
+      // $FlowFixMe[incompatible-call] Added when annotating Transformer. string is incompatible with Buffer.
+      str,
+      // $FlowFixMe[prop-missing] Added when annotating Transformer.
+      {
+        dev: false,
+        minify: false,
+        type: 'module',
+      },
+    );
 
   const differentEndingsResult = await transformStr(
     'one\rtwo\r\nthree\nfour\u2028five\u2029six',
