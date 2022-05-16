@@ -11,6 +11,7 @@ postMerge:
   pattern:
     - "scripts/__tests__/*-test.js"
     - "packages/**/__tests__/*.js"
+    - "eslint-rules/__tests__/strictly-null-test.js"
 postRun:
   command:
     - yarn --version
