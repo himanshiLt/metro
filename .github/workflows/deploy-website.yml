@@ -8,8 +8,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    if: github.repository == 'facebook/metro'
-
     env:
       working-directory: website
       node-version: 16.x
