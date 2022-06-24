@@ -62,11 +62,11 @@ type InlineModuleIdsOptions = $ReadOnly<{
 }>;
 
 // TS detection conditions copied from metro-react-native-babel-preset
-function isTypeScriptSource(fileName) {
+function isTypeScriptSource(fileName: string) {
   return !!fileName && fileName.endsWith('.ts');
 }
 
-function isTSXSource(fileName) {
+function isTSXSource(fileName: string) {
   return !!fileName && fileName.endsWith('.tsx');
 }
 
@@ -238,10 +238,10 @@ function getModuleCodeAndMap(
     dependencyMapReservedName: ?string,
     globalPrefix: string,
   }>,
-): {|
+): {
   moduleCode: string,
   moduleMap: ?BasicSourceMap,
-|} {
+} {
   const {file} = module;
   let moduleCode, moduleMap;
 

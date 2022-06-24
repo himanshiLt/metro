@@ -9,14 +9,15 @@ Object {
           "absolutePath": "/foo",
           "data": Object {
             "data": Object {
-              "isAsync": false,
+              "asyncType": null,
+              "locs": Array [],
             },
             "name": "foo",
           },
         },
       },
       "getSource": [Function],
-      "inverseDependencies": Set {},
+      "inverseDependencies": Array [],
       "output": Array [
         Object {
           "data": Object {
@@ -35,7 +36,8 @@ Object {
           "absolutePath": "/bar",
           "data": Object {
             "data": Object {
-              "isAsync": false,
+              "asyncType": null,
+              "locs": Array [],
             },
             "name": "bar",
           },
@@ -44,16 +46,17 @@ Object {
           "absolutePath": "/baz",
           "data": Object {
             "data": Object {
-              "isAsync": false,
+              "asyncType": null,
+              "locs": Array [],
             },
             "name": "baz",
           },
         },
       },
       "getSource": [Function],
-      "inverseDependencies": Set {
+      "inverseDependencies": Array [
         "/bundle",
-      },
+      ],
       "output": Array [
         Object {
           "data": Object {
@@ -69,9 +72,9 @@ Object {
     "/bar" => Object {
       "dependencies": Map {},
       "getSource": [Function],
-      "inverseDependencies": Set {
+      "inverseDependencies": Array [
         "/foo",
-      },
+      ],
       "output": Array [
         Object {
           "data": Object {
@@ -87,9 +90,9 @@ Object {
     "/baz" => Object {
       "dependencies": Map {},
       "getSource": [Function],
-      "inverseDependencies": Set {
+      "inverseDependencies": Array [
         "/foo",
-      },
+      ],
       "output": Array [
         Object {
           "data": Object {
@@ -103,9 +106,19 @@ Object {
       "path": "/baz",
     },
   },
-  "entryPoints": Array [
+  "entryPoints": Set {
     "/bundle",
-  ],
+  },
+  "importBundleNames": Set {},
+  "transformOptions": Object {
+    "dev": false,
+    "hot": false,
+    "minify": false,
+    "platform": null,
+    "runtimeBytecodeVersion": null,
+    "type": "module",
+    "unstable_transformProfile": "default",
+  },
 }
 `;
 
@@ -118,14 +131,15 @@ Object {
           "absolutePath": "/foo",
           "data": Object {
             "data": Object {
-              "isAsync": false,
+              "asyncType": null,
+              "locs": Array [],
             },
             "name": "foo",
           },
         },
       },
       "getSource": [Function],
-      "inverseDependencies": Set {},
+      "inverseDependencies": Array [],
       "output": Array [
         Object {
           "data": Object {
@@ -139,8 +153,18 @@ Object {
       "path": "/bundle",
     },
   },
-  "entryPoints": Array [
+  "entryPoints": Set {
     "/bundle",
-  ],
+  },
+  "importBundleNames": Set {},
+  "transformOptions": Object {
+    "dev": false,
+    "hot": false,
+    "minify": false,
+    "platform": null,
+    "runtimeBytecodeVersion": null,
+    "type": "module",
+    "unstable_transformProfile": "default",
+  },
 }
 `;

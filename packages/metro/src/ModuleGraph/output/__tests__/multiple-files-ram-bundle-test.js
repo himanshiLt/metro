@@ -11,23 +11,16 @@
 
 'use strict';
 
-declare var jest: any;
-
 import type {Module} from '../../types.flow';
 
 const multipleFilesRamBundle = require('../multiple-files-ram-bundle');
 const {getModuleCodeAndMap} = require('../util');
 
-declare var describe: any;
-declare var expect: any;
-declare var it: (string, () => ?Promise<any>) => void;
-declare var beforeAll: (() => ?Promise<any>) => void;
-
 let code;
 let map;
 let extraFiles;
 let ids, modules, requireCall;
-const idsForPath = ({path}) => {
+const idsForPath = ({path}: {path: string, ...}) => {
   const id = getId(path);
   return {moduleId: id, localId: id};
 };
@@ -90,7 +83,10 @@ it('bundles each file separately', () => {
   });
 });
 
-function createRamBundle(preloadedModules = new Set(), ramGroups?) {
+function createRamBundle(
+  preloadedModules: Set<string> = new Set(),
+  ramGroups?: empty,
+) {
   const build = multipleFilesRamBundle.createBuilder(
     preloadedModules,
     ramGroups,
@@ -111,8 +107,8 @@ function createRamBundle(preloadedModules = new Set(), ramGroups?) {
 function makeModule(
   name: string,
   deps: Array<string> = [],
-  type = 'module',
-  moduleCode = `var ${name};`,
+  type: string = 'module',
+  moduleCode: string = `var ${name};`,
 ): Module {
   const path = makeModulePath(name);
   return {
@@ -123,6 +119,7 @@ function makeModule(
       functionMap:
         type !== 'module' ? null : {names: ['<global>'], mappings: 'AAA'},
       path,
+      // $FlowFixMe[incompatible-return]
       type,
       libraryIdx: null,
     },
@@ -159,7 +156,7 @@ function makeDependency(name: string) {
   };
 }
 
-function expectedCodeAndMap(module) {
+function expectedCodeAndMap(module: Module) {
   return getModuleCodeAndMap(module, x => idsForPath(x).moduleId, {
     dependencyMapReservedName: undefined,
     enableIDInlining: true,
@@ -167,11 +164,11 @@ function expectedCodeAndMap(module) {
   });
 }
 
-function expectedCode(module) {
+function expectedCode(module: Module) {
   return expectedCodeAndMap(module).moduleCode;
 }
 
-function expectedMap(module) {
+function expectedMap(module: Module) {
   return expectedCodeAndMap(module).moduleMap;
 }
 
@@ -191,13 +188,13 @@ function countLines(module: Module): number {
   return module.file.code.split('\n').length;
 }
 
-function lineByLineMap(file: string): {|
+function lineByLineMap(file: string): {
   file: string,
   mappings: string,
   names: Array<empty>,
   sources: Array<string>,
   version: number,
-|} {
+} {
   return {
     file,
     mappings: '',

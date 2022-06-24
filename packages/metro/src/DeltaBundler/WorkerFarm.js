@@ -18,17 +18,17 @@ import type {Readable} from 'stream';
 const {Worker: JestWorker} = require('jest-worker');
 const {Logger} = require('metro-core');
 
-type WorkerInterface = {|
+type WorkerInterface = {
   getStdout(): Readable,
   getStderr(): Readable,
   end(): void,
   ...Worker,
-|};
+};
 
-type TransformerResult = $ReadOnly<{|
+type TransformerResult = $ReadOnly<{
   result: TransformResult<>,
   sha1: string,
-|}>;
+}>;
 
 class WorkerFarm {
   _config: ConfigT;
@@ -136,7 +136,7 @@ class WorkerFarm {
     return null;
   }
 
-  _formatGenericError(err, filename: string): TransformError {
+  _formatGenericError(err: any, filename: string): TransformError {
     const error = new TransformError(`${filename}: ${err.message}`);
 
     return Object.assign(error, {
@@ -145,7 +145,7 @@ class WorkerFarm {
     });
   }
 
-  _formatBabelError(err, filename: string): TransformError {
+  _formatBabelError(err: any, filename: string): TransformError {
     const error = new TransformError(
       `${err.type || 'Error'}${
         err.message.includes(filename) ? '' : ' in ' + filename

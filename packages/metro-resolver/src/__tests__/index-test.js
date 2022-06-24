@@ -19,6 +19,8 @@ const path = require('path');
 
 const CONTEXT: ResolutionContext = (() => {
   const fileSet = new Set();
+  /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
+   * LTI update could not be added via codemod */
   (function fillFileSet(fileTree, prefix: string) {
     for (const entName in fileTree) {
       const entPath = path.join(prefix, entName);
@@ -576,7 +578,7 @@ describe('resolveRequest', () => {
   it('is called with the platform and non-redirected module path', () => {
     const contextWithRedirect = {
       ...context,
-      redirectModulePath: filePath => filePath + '.redirected',
+      redirectModulePath: (filePath: string) => filePath + '.redirected',
     };
     expect(Resolver.resolve(contextWithRedirect, 'does-not-exist', 'android'))
       .toMatchInlineSnapshot(`
@@ -599,7 +601,7 @@ describe('resolveRequest', () => {
     }));
     const contextWithRedirect = {
       ...context,
-      redirectModulePath: filePath => false,
+      redirectModulePath: (filePath: string) => false,
     };
     expect(Resolver.resolve(contextWithRedirect, 'does-not-exist', 'android'))
       .toMatchInlineSnapshot(`
